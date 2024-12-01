@@ -1,15 +1,8 @@
-// تهيئة Firebase
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// تهيئة Supabase
+const { createClient } = supabase;
+const supabaseUrl = 'YOUR_SUPABASE_URL';
+const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 let startTime = null;
 let endTime = null;
@@ -26,24 +19,34 @@ document.getElementById('startBreak').addEventListener('click', () => {
     }
 });
 
-document.getElementById('endBreak').addEventListener('click', () => {
+document.getElementById('endBreak').addEventListener('click', async () => {
     if (startTime && employeeName) {
         endTime = new Date();
         const breakDuration = (endTime - startTime) / 1000; // حساب الفرق بالثواني
         totalBreakTime += breakDuration;
 
         // تحديث قاعدة البيانات
-        db.collection('employees').doc(employeeName).get().then((doc) => {
-            if (doc.exists) {
-                db.collection('employees').doc(employeeName).update({
-                    totalBreakTime: firebase.firestore.FieldValue.increment(breakDuration)
-                });
-            } else {
-                db.collection('employees').doc(employeeName).set({
-                    totalBreakTime: breakDuration
-                });
-            }
-        });
+        const { data, error } = await supabase
+            .from('employees')
+            .select('total_break_time')
+            .eq('name', employeeName)
+            .single();
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        if (data) {
+            await supabase
+                .from('employees')
+                .update({ total_break_time: data.total_break_time + breakDuration })
+                .eq('name', employeeName);
+        } else {
+            await supabase
+                .from('employees')
+                .insert([{ name: employeeName, total_break_time: breakDuration }]);
+        }
 
         updateBreakTimeDisplay();
         alert('انتهى الاستأذان في: ' + endTime.toLocaleTimeString());
