@@ -1,35 +1,32 @@
-// تهيئة Firebase
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
+// تهيئة Supabase
+const { createClient } = supabase;
+const supabaseUrl = 'YOUR_SUPABASE_URL';
+const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const breakTableBody = document.querySelector('#breakTable tbody');
 
-    db.collection('employees').get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            const employeeName = doc.id;
-            const totalBreakTime = doc.data().totalBreakTime;
+    const { data, error } = await supabase
+        .from('employees')
+        .select('name, total_break_time');
 
-            const row = document.createElement('tr');
-            const nameCell = document.createElement('td');
-            const timeCell = document.createElement('td');
+    if (error) {
+        console.error(error);
+        return;
+    }
 
-            nameCell.textContent = employeeName;
-            timeCell.textContent = formatTime(totalBreakTime);
+    data.forEach((employee) => {
+        const row = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        const timeCell = document.createElement('td');
 
-            row.appendChild(nameCell);
-            row.appendChild(timeCell);
-            breakTableBody.appendChild(row);
-        });
+        nameCell.textContent = employee.name;
+        timeCell.textContent = formatTime(employee.total_break_time);
+
+        row.appendChild(nameCell);
+        row.appendChild(timeCell);
+        breakTableBody.appendChild(row);
     });
 });
 
