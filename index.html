@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق استأذان الموظف</title>
+    <title>User Management</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>تسجيل استأذان الموظف</h1>
-        <input type="text" id="employeeName" placeholder="اسم الموظف">
-        <button id="startBreak">بدء الاستأذان</button>
-        <button id="endBreak">انتهاء الاستأذان</button>
-        <div id="breakTime">وقت الاستأذان: 0 ثانية</div>
-        <a href="admin.html">لوحة التحكم</a>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <h1>User Management</h1>
+    <form id="user-form">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <button type="submit">Add User</button>
+    </form>
+    <ul id="user-list"></ul>
     <script src="script.js"></script>
 </body>
 </html>
