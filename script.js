@@ -1,7 +1,7 @@
 
 
 const SUPABASE_URL = 'https://amljjbqcbklcukpeduzp.supabase.co'
-const SUPABASE_KEY = process.env.SUPABASE_KEY
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtbGpqYnFjYmtsY3VrcGVkdXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMwNzUzODMsImV4cCI6MjA0ODY1MTM4M30.r20ZtJCaV2BK2-eq1CYbecaPtpwcXZexjt3t2Wimhwo'
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
