@@ -1,8 +1,8 @@
-import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = 'https://amljjbqcbklcukpeduzp.supabase.co'
-const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
+
+const SUPABASE_URL = 'https://amljjbqcbklcukpeduzp.supabase.co'
+const SUPABASE_KEY = env.SUPABASE_KEY
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 document.getElementById('user-form').addEventListener('submit', async (e) => {
